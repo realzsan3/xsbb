@@ -3,7 +3,7 @@
 
 <head>
     <title>小声bb</title>
-    <!-- <link rel="shortcut icon" href="./favicon.ico" /> -->
+    <link rel="shortcut icon" href="./favicon.ico" />
     <link type="text/css" rel="stylesheet" href="https://at.alicdn.com/t/font_1755564_z4mhxbw13mq.css"></link>
     <link href="https://fonts.loli.net/css?family=Noto+Serif+SC:200,300,900&display=swap&subset=chinese-simplified" rel="stylesheet">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
@@ -26,7 +26,7 @@
     <main id="app">
         <aside>
             <p id="describe">
-                疯言疯语！
+                疯言疯语&无意义的bb
             </p>
         </aside>
         <p class="tip">至今总共 bb 了 {{count}} 条</p>
@@ -45,65 +45,7 @@
 </body>
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.5.3/dist/av-min.js"></script>
-<script type="text/javascript">
-    var {
-        Query
-    } = AV;
-    AV.init({
-        appId: "91UroQk3R6xRP5p6CD7bfDJm-MdYXbMMI", //你的 leancloud 应用 id （设置-应用keys-AppID）
-        appKey: "qxxUH8hJtxNcKYQbOfS6K9Ox", //你的 leancloud 应用 AppKey （设置-应用keys-AppKey）
-        //serverURLs: '国际版可删除该行，否则必须在后台绑定域名并填写在此'
-    });
-
-    var query = new AV.Query('content');
-
-    var app = new Vue({
-        el: '#app',
-        data: {
-            page: 0,
-            count: 0,
-            contents: []
-        },
-        methods: {
-            loadMore: function(event) {
-                getData(++this.page);
-            }
-        }
-    })
-
-    function urlToLink(str) {
-        var re = /(http|ftp|https):\/\/[\w-]+(.[\w-]+)+([\w-.,@?^=%&:/~+#]*[\w-\@?^=%&/~+#])?/g;;
-
-        str = str.replace(re, function(website) {
-            return "<a href='" + website + "' target='_blank'> <i class='iconfont icon-lianjie-copy'></i>链接 </a>";
-        });
-        return str;
-    }
-
-    function getData(page = 0) {
-        query.descending('createdAt').skip(page * 20).limit(20).find().then(function(results) {
-            if (results.length == 0) {
-                alert('之前没 bb 过了')
-            } else {
-                let resC = results;
-                reqData = false;
-                resC.forEach((i) => {
-                    let dateTmp = new Date(i.createdAt);
-                    i.attributes.time = `${dateTmp.getFullYear()}-${(dateTmp.getMonth() + 1) < 10 ? ('0' + (dateTmp.getMonth()+1)) : dateTmp.getMonth()+1}-${(dateTmp.getDate() + 1) < 10 ? ('0' + dateTmp.getDate()) : dateTmp.getDate()} ${(dateTmp.getHours() + 1) <= 10 ? ('0' + dateTmp.getHours()) : dateTmp.getHours()}:${(dateTmp.getMinutes() + 1) <= 10 ? ('0' + dateTmp.getMinutes()) : dateTmp.getMinutes()}`;
-                    i.attributes.content = "<span>" + urlToLink(i.attributes.content) + "</span>";
-                    app.contents.push(i);
-                })
-            }
-
-        }, function(error) {});
-    }
-
-    getData(0);
-
-    query.count().then(function(count) {
-        app.count = count;
-    }, function(error) {});
-</script>
+<script src="xsbb.js"></script>
 <style type="text/css">
     @media (prefers-color-scheme: dark) {
         /* 夜间模式 */
