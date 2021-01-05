@@ -24,3 +24,7 @@ clone 大佬的！
 [点击安装快捷指令](https://www.icloud.com/shortcuts/3cfcbc36a6a24e0a8721bfeef8dfc6cf)或[点击安装 Quicker](https://getquicker.net/sharedaction?code=eeb80278-5f53-4b0d-d333-08d7e0dd26a9) 可分别在 iOS 和 Windows 平台快速发表内容，也可以查阅 LeanCloud [文档](https://console.leancloud.app/docs/rest_api.html#hash1094926014)使用任意 HTTP 请求工具发送数据；
 
 更多详情请参考少数派文章[保卫表达：用后端 BaaS 快速搭建专属无点赞评论版微博——b言b语](https://sspai.com/post/60024)
+
+### update 2021-1-5
+
+新增多人使用颜色变换，标签功能
