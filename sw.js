@@ -14,7 +14,7 @@ if (workbox) {
 
 var cacheFiles = [
     {
-        url: '/index.html',
+        url: '/xsbb/index.html',
         revision: 'v1' // 加revision，版本改了以後，sw.js 在 application 上會更新
     }
 ];
