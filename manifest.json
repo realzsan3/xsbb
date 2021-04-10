@@ -2,7 +2,7 @@
     "name": "xsbb",
     "short_name": "bb",
     "lang": "zh-CN",
-    "start_url": "xsbb/index.html",
+    "start_url": "/xsbb/index.html",
     "display": "standalone",
     "theme_color": "#000000",
     "background_color": "#000000",
