@@ -48,17 +48,18 @@ workbox.routing.registerRoute(
     })
 );
 
-workbox.routing.registerRoute(
-    /\.TTF$/,
-    new workbox.strategies.StaleWhileRevalidate({
-        cacheName: 'font-cache-v1'
-    })
-);
 
 workbox.routing.registerRoute(
     /\.json$/,
     new workbox.strategies.StaleWhileRevalidate({
-        cacheName: 'json-cache-v1'
+        cacheName: 'json-cache-v1',
+        plugins: [
+            //设置过期时间和最大数量
+            new workbox.expiration.Plugin({
+              maxEntries: 20,
+              maxAgeSeconds: 7 * 24 * 60 * 60,
+            })
+          ],
     })
 );
 
