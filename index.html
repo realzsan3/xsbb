@@ -3,13 +3,14 @@
 
 <head>
     <title>小声 BB</title>
-    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" href="images/icons/favicon.ico" />
     <link type="text/css" rel="stylesheet" href="https://at.alicdn.com/t/font_1755564_z4mhxbw13mq.css">
     </link>
     <link href="https://fonts.loli.net/css?family=Noto+Serif+SC:200,300,900&display=swap&subset=chinese-simplified"
         rel="stylesheet">
     <link rel="apple-touch-icon"
-        href="./favicon.ico">
+        href="images/icons/favicon.ico">
     <meta name="viewport"
         content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="description" content="">
@@ -20,9 +21,21 @@
     <meta name="google" content="index,follow" />
     <meta name="googlebot" content="index,follow" />
     <meta name="verify" content="index,follow" />
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="bb">
     <meta name="apple-mobile-web-app-title" content="小声 BB">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#000000">
+    <meta name="msapplication-navbutton-color" content="#000000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/index.html">
+
+    <link rel="icon" type="image/png" sizes="128x128" href="images/icons/icon-128x128.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="images/icons/icon-128x128.png">
+    <link rel="icon" type="image/png" sizes="144x144" href="images/icons/icon-144x144.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="144x144" href="images/icons/icon-144x144.png">
+    
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-175460382-2"></script>
 	<script>
@@ -265,4 +278,16 @@
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.5.3/dist/av-min.js"></script>
 <script src="xsbb.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        try {
+            navigator.serviceWorker.register('serviceWorker.js');
+            console.log('SW registered');
+
+        } catch (error) {
+            console.log('SW failed');
+
+        }
+    }
+</script>
 </html>
