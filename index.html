@@ -281,7 +281,9 @@
 <script>
     if ('serviceWorker' in navigator) {
         try {
-            navigator.serviceWorker.register('./serviceWorker.js');
+            navigator.serviceWorker.register('./serviceWorker.js').then(function(registartion){
+      console.log('支持sw:',registartion.scope)
+    });
             console.log('SW registered');
 
         } catch (error) {
