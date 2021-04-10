@@ -1,4 +1,10 @@
 importScripts('https://cdn.jsdelivr.net/npm/workbox-sw@4.3.1/build/workbox-sw.min.js');
+workbox.core.setCacheNameDetails({
+    prefix: "xsbb",
+    suffix: "v1",
+    precache: "custom-precache-name",
+    runtime: "custom-runtime-name"
+  });
 
 if (workbox) {
     console.log("Yay! Workbox is loaded 🎉");
@@ -8,7 +14,7 @@ if (workbox) {
 
 var cacheFiles = [
     {
-        url: '/Index.html',
+        url: '/index.html',
         revision: 'v1' // 加revision，版本改了以後，sw.js 在 application 上會更新
     }
 ];
@@ -58,7 +64,7 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
     // Cache image files.
-    /\.(?:png|jpg|jpeg|svg|gif)$/,
+    /\.(?:png|jpg|jpeg|svg|gif|ico)$/,
     // Use the cache if it's available.
     new workbox.strategies.CacheFirst({
         // Use a custom cache name.
