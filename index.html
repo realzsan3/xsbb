@@ -278,17 +278,27 @@
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.5.3/dist/av-min.js"></script>
 <script src="xsbb.js"></script>
-<script>
+<!-- <script>
     if ('serviceWorker' in navigator) {
         try {
             navigator.serviceWorker.register('./serviceWorker.js').then(function(registartion){
       console.log('支持sw:',registartion.scope)
     });
-            console.log('SW registered');
+            // console.log('SW registered');
 
         } catch (error) {
             console.log('SW failed');
         }
     }
-</script>
+</script> -->
+
+<script>
+    // 检测浏览器是否支持SW
+    if(navigator.serviceWorker != null){
+      navigator.serviceWorker.register('sw.js')
+      .then(function(registartion){
+        console.log('支持sw:',registartion.scope)
+      })
+    }
+  </script>
 </html>
