@@ -9,8 +9,7 @@
     </link>
     <link href="https://fonts.loli.net/css?family=Noto+Serif+SC:200,300,900&display=swap&subset=chinese-simplified"
         rel="stylesheet">
-    <link rel="apple-touch-icon"
-        href="images/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="images/icons/favicon.ico">
     <meta name="viewport"
         content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="description" content="">
@@ -35,19 +34,15 @@
     <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="images/icons/icon-128x128.png">
     <link rel="icon" type="image/png" sizes="144x144" href="images/icons/icon-144x144.png">
     <link rel="apple-touch-icon" type="image/png" sizes="144x144" href="images/icons/icon-144x144.png">
-    
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-175460382-2"></script>
-	<script>
-	    window.dataLayer = window.dataLayer || [];
-	
-	    function gtag() {
-	        dataLayer.push(arguments);
-	    }
-	    gtag('js', new Date());
-	
-	    gtag('config', 'UA-175460382-1');
-	</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-175460382-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-175460382-1');
+    </script>
 </head>
 <style type="text/css">
     @font-face {
@@ -102,7 +97,7 @@
         }
 
     }
-    
+
     [v-cloak] {
         display: none;
     }
@@ -216,7 +211,7 @@
 
 
     .type-1 {
-        border-top-color: #2196F3 ;
+        border-top-color: #2196F3;
     }
 
     .type-1 .equipment::after {
@@ -281,11 +276,12 @@
 
 <script>
     // 检测浏览器是否支持SW
-    if(navigator.serviceWorker != null){
-      navigator.serviceWorker.register('sw.js')
-      .then(function(registartion){
-        console.log('支持sw:',registartion.scope)
-      })
+    if (navigator.serviceWorker != null) {
+        navigator.serviceWorker.register('sw.js')
+            .then(function (registartion) {
+                console.log('支持sw:', registartion.scope)
+            })
     }
-  </script>
+</script>
+
 </html>
