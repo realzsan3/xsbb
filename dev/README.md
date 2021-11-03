@@ -25,6 +25,10 @@ clone 大佬的！
 
 更多详情请参考少数派文章[保卫表达：用后端 BaaS 快速搭建专属无点赞评论版微博——b言b语](https://sspai.com/post/60024)
 
+### update 2021-11-03
+
+使用gitmoji
+
 ### update 2021-4-10
 
 支持pwa
