@@ -4,14 +4,14 @@ var {
 AV.init({
     appId: "91UroQk3R6xRP5p6CD7bfDJm-MdYXbMMI", 
     appKey: "qxxUH8hJtxNcKYQbOfS6K9Ox", 
+    serverURLs: 'https://leancloudapi.xsbb.ml'
 });
 
 //设定存储数据的 className
 var query = new AV.Query('content');
 
 var app = new Vue({
-    el: '#app',
-    data: {
+    el: '#app', data: {
         page: 0,
         count: 0,
         contents: []
