@@ -2,7 +2,7 @@
 
 这是一个基于 [LeanCloud](https://leancloud.com) 搭建的没有评论、点赞、阅读量干扰的说话空间。
 
-clone 大佬的！
+原作者[nonsense.fun](https://github.com/daibor/nonsense.fun)
 
 ## 对抗
 
