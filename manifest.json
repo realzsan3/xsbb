@@ -4,6 +4,8 @@
     "lang": "zh-CN",
     "start_url": "/",
     "display": "standalone",
+    "description": "xsbb-webapp",
+    "orientation": "portrait-primary",
     "theme_color": "#000000",
     "background_color": "#000000",
     "icons": [{
