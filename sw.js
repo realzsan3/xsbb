@@ -1,26 +1,19 @@
-// importScripts("https://cdn.jsdelivr.net/npm/workbox-sw@4.3.1/build/workbox-sw.min.js");
-// workbox.setConfig({
-//     modulePathPrefix: 'https://cdn.jsdelivr.net/npm/workbox-sw@4.3.1/build/workbox-sw.min.js',
-// });
-importScripts("./js/workbox-sw.min.js");
-workbox.setConfig({
-    modulePathPrefix: './js/',
-});
+importScripts("https://fastly.jsdelivr.net/npm/workbox-sw@6.5.4/build/workbox-sw.min.js");
+// importScripts("/js/workbox-sw.min.js");
+workbox.setConfig(
+    {
+        // modulePathPrefix: '/js/',
+        debug: false
+    }
+);
 
 let cacheSuffixVersion = '-220806'; // 缓存版本号
 const maxEntries = 100; // 最大条目数
 
-core.setCacheNameDetails({
+workbox.core.setCacheNameDetails({
     prefix: 'xsbb', // 前缀
     suffix: cacheSuffixVersion, // 后缀
 });
-
-// workbox.core.setCacheNameDetails({
-//     prefix: "xsbb",
-//     suffix: "v1",
-//     precache: "precache-xsbb",
-//     runtime: "runtime-xsbb"
-// });
 
 if (workbox) {
     console.log("Yay! Workbox is loaded 🎉")
@@ -36,25 +29,15 @@ let cacheFiles = [
 
 workbox.precaching.precacheAndRoute(cacheFiles);
 
-// workbox.routing.registerRoute(/\.css$/, new workbox.strategies.StaleWhileRevalidate({
-//     cacheName: "css-cache-v1"
-// }));
-
-// workbox.routing.registerRoute(/\.(?:js)$/, new workbox.strategies.StaleWhileRevalidate({
-//     cacheName: "js-cache-v1"
-// }));
-
 workbox.routing.registerRoute(/\.json$/, new workbox.strategies.StaleWhileRevalidate({
     cacheName: "json-cache" + cacheSuffixVersion,
-    plugins: [new workbox.expiration.Plugin({
-        maxEntries,
-        maxAgeSeconds: 7 * 24 * 60 * 60,
-    })],
+    plugins: [
+        new workbox.expiration.ExpirationPlugin({
+            maxEntries,
+            maxAgeSeconds: 7 * 24 * 60 * 60,
+        })],
 }));
 
-// workbox.routing.registerRoute(/\.(?:png|jpg|jpeg|svg|gif|ico)$/, new workbox.strategies.CacheFirst({
-//     cacheName: "image-cache-v1"
-// }));
 
 workbox.routing.registerRoute(
     // 匹配 fonts.googleapis.com 和 fonts.gstatic.com 两个域名
@@ -91,22 +74,14 @@ workbox.routing.registerRoute(
 workbox.routing.registerRoute(
     // 匹配 leancloudapi.xsbb.ml
     new RegExp('^https://(?:leancloudapi\\.xsbb\\.ml)'),
-    new workbox.strategies.StaleWhileRevalidate({
+    new workbox.strategies.NetworkFirst({
         // cache storage 名称和版本号
-        cacheName: 'api-cache' + cacheSuffixVersion,
-        plugins: [
-            // 使用 expiration 插件实现缓存条目数目和时间控制
-            new workbox.expiration.ExpirationPlugin({
-                // 最大保存项目
-                maxEntries,
-                // 缓存 30 天
-                maxAgeSeconds: 7 * 24 * 60 * 60,
-            }),
-            // 使用 cacheableResponse 插件缓存状态码为 0 的请求
-            new workbox.cacheableResponse.CacheableResponsePlugin({
-                statuses: [0, 200],
-            }),
-        ],
+        cacheName: 'leancloud-api' + cacheSuffixVersion,
+        fetchOptions: {
+            mode: 'cors',
+            credentials: 'omit',
+        },
+        networkTimeoutSeconds: 3,
     })
 );
 
@@ -115,3 +90,14 @@ workbox.routing.setDefaultHandler(
         networkTimeoutSeconds: 3,
     })
 );
+
+
+workbox.googleAnalytics.initialize({
+    parameterOverrides: {
+        cd1: 'offline',
+    },
+    hitFilter: (params) => {
+        const queueTimeInSeconds = Math.round(params.get('qt') / 1000);
+        params.set('cm1', queueTimeInSeconds);
+    },
+});
