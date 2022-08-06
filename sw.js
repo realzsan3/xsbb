@@ -1,9 +1,8 @@
 importScripts("https://fastly.jsdelivr.net/npm/workbox-sw@6.5.4/build/workbox-sw.min.js");
-// importScripts("/js/workbox-sw.min.js");
 workbox.setConfig(
     {
         // modulePathPrefix: '/js/',
-        debug: false
+        debug: true
     }
 );
 
@@ -31,12 +30,32 @@ workbox.precaching.precacheAndRoute(cacheFiles);
 
 workbox.routing.registerRoute(/\.json$/, new workbox.strategies.StaleWhileRevalidate({
     cacheName: "json-cache" + cacheSuffixVersion,
+    fetchOptions: {
+        mode: 'cors'
+      },
     plugins: [
         new workbox.expiration.ExpirationPlugin({
             maxEntries,
             maxAgeSeconds: 7 * 24 * 60 * 60,
         })],
 }));
+
+workbox.routing.registerRoute(
+    new RegExp('^https://fastly\\.jsdelivr\\.net'),
+    new workbox.strategies.CacheFirst({
+      cacheName: 'static-immutable' + cacheSuffixVersion,
+      fetchOptions: {
+        mode: 'cors',
+        credentials: 'omit',
+      },
+      plugins: [
+        new workbox.expiration.ExpirationPlugin({
+          maxAgeSeconds: 30 * 24 * 60 * 60,
+          purgeOnQuotaError: true,
+        }),
+      ],
+    })
+  );
 
 
 workbox.routing.registerRoute(
@@ -74,14 +93,9 @@ workbox.routing.registerRoute(
 workbox.routing.registerRoute(
     // 匹配 leancloudapi.xsbb.ml
     new RegExp('^https://(?:leancloudapi\\.xsbb\\.ml)'),
-    new workbox.strategies.NetworkFirst({
+    new workbox.strategies.StaleWhileRevalidate({
         // cache storage 名称和版本号
-        cacheName: 'leancloud-api' + cacheSuffixVersion,
-        fetchOptions: {
-            mode: 'cors',
-            credentials: 'omit',
-        },
-        networkTimeoutSeconds: 3,
+        cacheName: 'leancloud-api-cache' + cacheSuffixVersion,
     })
 );
 
