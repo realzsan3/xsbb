@@ -2,7 +2,7 @@ importScripts("https://fastly.jsdelivr.net/npm/workbox-sw@6.5.4/build/workbox-sw
 workbox.setConfig(
     {
         // modulePathPrefix: '/js/',
-        debug: true
+        debug: false
     }
 );
 
