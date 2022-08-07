@@ -58,8 +58,8 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-    // 匹配 fonts.googleapis.com 和 fonts.gstatic.com 两个域名
-    new RegExp('.*.tff'),
+    // 匹配 woff 字体
+    new RegExp('.*.woff'),
     new workbox.strategies.StaleWhileRevalidate({
         // cache storage 名称和版本号
         cacheName: 'font-cache' + cacheSuffixVersion,
