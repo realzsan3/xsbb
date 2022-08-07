@@ -32,7 +32,7 @@ workbox.routing.registerRoute(/\.json$/, new workbox.strategies.StaleWhileRevali
     cacheName: "json-cache" + cacheSuffixVersion,
     fetchOptions: {
         mode: 'cors'
-      },
+    },
     plugins: [
         new workbox.expiration.ExpirationPlugin({
             maxEntries,
@@ -43,20 +43,19 @@ workbox.routing.registerRoute(/\.json$/, new workbox.strategies.StaleWhileRevali
 workbox.routing.registerRoute(
     new RegExp('^https://fastly\\.jsdelivr\\.net'),
     new workbox.strategies.CacheFirst({
-      cacheName: 'static-immutable' + cacheSuffixVersion,
-      fetchOptions: {
-        mode: 'cors',
-        credentials: 'omit',
-      },
-      plugins: [
-        new workbox.expiration.ExpirationPlugin({
-          maxAgeSeconds: 30 * 24 * 60 * 60,
-          purgeOnQuotaError: true,
-        }),
-      ],
+        cacheName: 'static-immutable' + cacheSuffixVersion,
+        fetchOptions: {
+            mode: 'cors',
+            credentials: 'omit',
+        },
+        plugins: [
+            new workbox.expiration.ExpirationPlugin({
+                maxAgeSeconds: 30 * 24 * 60 * 60,
+                purgeOnQuotaError: true,
+            }),
+        ],
     })
-  );
-
+);
 
 workbox.routing.registerRoute(
     // 匹配 fonts.googleapis.com 和 fonts.gstatic.com 两个域名
@@ -93,9 +92,14 @@ workbox.routing.registerRoute(
 workbox.routing.registerRoute(
     // 匹配 leancloudapi.xsbb.ml
     new RegExp('^https://(?:leancloudapi\\.xsbb\\.ml)'),
-    new workbox.strategies.StaleWhileRevalidate({
+    new workbox.strategies.NetworkFirst({
         // cache storage 名称和版本号
         cacheName: 'leancloud-api-cache' + cacheSuffixVersion,
+        fetchOptions: {
+            mode: 'cors',
+            credentials: 'omit',
+        },
+        networkTimeoutSeconds: 3,
     })
 );
 
