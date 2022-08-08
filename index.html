@@ -3,7 +3,7 @@
             .then(regs => {
                 for (let reg of regs) {
                     // 注销掉不是当前作用域的所有的 Service Worker
-                    if (reg.scope !== 'https://xsbb.ml/') {
+                    if (reg.scope !== 'https://www.xsbb.ml/') {
                         reg.unregister()
                     }
                     // if (reg.scope !== 'http://localhost:8000/') {
