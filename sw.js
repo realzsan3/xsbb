@@ -110,12 +110,4 @@ workbox.routing.setDefaultHandler(
 );
 
 
-workbox.googleAnalytics.initialize({
-    parameterOverrides: {
-        cd1: 'offline',
-    },
-    hitFilter: (params) => {
-        const queueTimeInSeconds = Math.round(params.get('qt') / 1000);
-        params.set('cm1', queueTimeInSeconds);
-    },
-});
+workbox.googleAnalytics.initialize();
