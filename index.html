@@ -10,8 +10,8 @@
         rel="stylesheet">
     <link rel="apple-touch-icon" href="images/icons/favicon.ico">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <link rel="dns-prefetch" href="https://leancloudapi.zsan.cf">
-    <link rel="preconnect" href="https://leancloudapi.zsan.cf" crossorigin>
+    <link rel="dns-prefetch" href="https://leancloudapi.zsan.xyz">
+    <link rel="preconnect" href="https://leancloudapi.zsan.xyz" crossorigin>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="yongs">
@@ -241,7 +241,7 @@
 <body>
     <header id="header">
         <div class="title">
-            <h1><a href="https://xsbb.zsan.cf/" style="color: inherit; font-size: inherit;text-decoration: none;">小声
+            <h1><a href="https://xsbb.zsan.xyz/" style="color: inherit; font-size: inherit;text-decoration: none;">小声
                     BB</a></h1>
         </div>
     </header>
@@ -271,7 +271,7 @@
             .then(regs => {
                 for (let reg of regs) {
                     // 注销掉不是当前作用域的所有的 Service Worker
-                    if (reg.scope !== 'https://leancloudapi.zsan.cf') {
+                    if (reg.scope !== 'https://leancloudapi.zsan.xyz') {
                         reg.unregister()
                     }
                     // if (reg.scope !== 'http://localhost:8000/') {

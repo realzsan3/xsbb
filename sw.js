@@ -90,7 +90,7 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-    // 匹配 https://leancloudapi.zsan.cf
+    // 匹配 https://leancloudapi.zsan.xyz
     new RegExp('^https://(?:leancloudapi\\.zsan\\.cf)'),
     new workbox.strategies.NetworkFirst({
         // cache storage 名称和版本号
