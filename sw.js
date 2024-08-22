@@ -90,8 +90,8 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-    // 匹配 https://leancloudapi.zsan.xyz
-    new RegExp('^https://(?:leancloudapi\\.zsan\\.cf)'),
+    // 匹配 lecloudapi.919333.xyz
+    new RegExp('^https://(?:lecloudapi\\.919333\\.xyz)'),
     new workbox.strategies.NetworkFirst({
         // cache storage 名称和版本号
         cacheName: 'leancloud-api-cache' + cacheSuffixVersion,

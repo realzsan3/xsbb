@@ -4,7 +4,7 @@ var {
 AV.init({
     appId: "91UroQk3R6xRP5p6CD7bfDJm-MdYXbMMI", 
     appKey: "qxxUH8hJtxNcKYQbOfS6K9Ox", 
-    serverURLs: 'https://leancloudapi.zsan.xyz'
+    serverURLs: 'https://lecloudapi.919333.xyz'
 });
 
 //设定存储数据的 className
