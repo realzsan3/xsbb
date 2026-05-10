@@ -122,6 +122,7 @@
     <input type="text" id="f-device" placeholder="如：iPhone 17 Pro Max📱">
   </div>
   <button class="btn btn-primary" id="submit-btn" onclick="submitPost()">发布</button>
+  
 
   <!-- 列表 -->
   <h2>最近 20 条</h2>
@@ -202,6 +203,7 @@
       });
       if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
       toast('发布成功 ✓');
+      localStorage.removeItem('xsbb_v2');
       document.getElementById('f-content').value = '';
       document.getElementById('f-tag').value     = '';
       loadPosts();
@@ -225,6 +227,7 @@
       if (!res.ok) throw new Error('删除失败');
       toast(`已删除 #${id}`);
       document.querySelector(`[data-id="${id}"]`)?.remove();
+      localStorage.removeItem('xsbb_v2');
     } catch(e) {
       toast(e.message, 'fail');
     }
