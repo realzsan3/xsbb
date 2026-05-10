@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小声 BB — 后台</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0d1117; color: #c9d1d9;
+      min-height: 100vh; padding: 32px 16px;
+    }
+    .wrap  { max-width: 600px; margin: 0 auto }
+    h1     { font-size: 1.3rem; color: #f0f6fc; margin-bottom: 24px }
+    h2     { font-size: .9rem; color: #8b949e; margin: 32px 0 12px; letter-spacing: .05em; text-transform: uppercase }
+
+    /* Token bar */
+    .token-bar {
+      display: flex; gap: 10px; align-items: center;
+      background: #161b22; border: 1px solid #30363d;
+      border-radius: 8px; padding: 12px 14px; margin-bottom: 24px;
+    }
+    .token-bar input { flex: 1 }
+    .token-status    { font-size: .8rem; color: #8b949e; white-space: nowrap }
+    .token-status.ok { color: #3fb950 }
+
+    /* Form */
+    .field   { margin-bottom: 14px }
+    label    { display: block; font-size: .8rem; color: #8b949e; margin-bottom: 5px }
+    textarea, input[type=text], input[type=password], select {
+      width: 100%; background: #161b22;
+      border: 1px solid #30363d; border-radius: 6px;
+      color: #c9d1d9; font-size: .95rem;
+      padding: 9px 12px; outline: none;
+      font-family: inherit;
+      transition: border-color .15s;
+    }
+    textarea         { resize: vertical; min-height: 110px; line-height: 1.6 }
+    textarea:focus, input:focus, select:focus { border-color: #388bfd }
+    select option    { background: #161b22 }
+
+    .row { display: flex; gap: 12px }
+    .row .field { flex: 1 }
+
+    /* Buttons */
+    .btn {
+      width: 100%; padding: 10px; border: none; border-radius: 6px;
+      font-size: .95rem; font-family: inherit; cursor: pointer;
+      transition: background .15s, opacity .15s;
+    }
+    .btn-primary  { background: #238636; color: #fff }
+    .btn-primary:hover  { background: #2ea043 }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed }
+
+    /* Post list */
+    .post-card {
+      background: #161b22; border: 1px solid #30363d;
+      border-radius: 8px; padding: 14px;
+      margin-bottom: 10px; position: relative;
+    }
+    .post-meta { font-size: .75rem; color: #8b949e; margin-bottom: 8px }
+    .post-body { font-size: .9rem; line-height: 1.7; white-space: pre-wrap; word-break: break-all; color: #c9d1d9 }
+    .post-tag  { font-size: .75rem; color: #8b949e; margin-top: 6px }
+    .del-btn {
+      position: absolute; top: 10px; right: 10px;
+      background: none; border: 1px solid #30363d;
+      color: #8b949e; border-radius: 5px;
+      padding: 2px 10px; font-size: .8rem;
+      cursor: pointer; transition: all .15s;
+    }
+    .del-btn:hover { background: #da3633; border-color: #da3633; color: #fff }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: #161b22; border: 1px solid #30363d;
+      border-radius: 8px; padding: 9px 18px;
+      font-size: .875rem; white-space: nowrap;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s;
+    }
+    .toast.show      { opacity: 1 }
+    .toast.ok        { border-color: #3fb950; color: #3fb950 }
+    .toast.fail      { border-color: #f85149; color: #f85149 }
+
+    .empty { color: #8b949e; font-size: .9rem; padding: 20px 0 }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>小声 BB 后台</h1>
+
+  <!-- Token -->
+  <div class="token-bar">
+    <input type="password" id="token-input" placeholder="输入 ADMIN_TOKEN">
+    <span class="token-status" id="token-status">未填写</span>
+  </div>
+
+  <!-- 发布表单 -->
+  <div class="field">
+    <label>内容 *</label>
+    <textarea id="f-content" placeholder="说点什么…"></textarea>
+  </div>
+  <div class="row">
+    <div class="field">
+      <label>标签 tag</label>
+      <input type="text" id="f-tag" placeholder="可选">
+    </div>
+    <div class="field">
+      <label>类型 type</label>
+      <select id="f-type">
+        <option value="0">0 — 粉色边</option>
+        <option value="1">1 — 蓝色边</option>
+      </select>
+    </div>
+  </div>
+  <div class="field">
+    <label>设备标签（留空则按类型自动填入）</label>
+    <input type="text" id="f-device" placeholder="如：iPhone 17 Pro Max📱">
+  </div>
+  <button class="btn btn-primary" id="submit-btn" onclick="submitPost()">发布</button>
+
+  <!-- 列表 -->
+  <h2>最近 20 条</h2>
+  <div id="post-list"><p class="empty">加载中…</p></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── 配置（替换成你的 Worker 地址）──────────────────────────────
+  const API = 'https://api.xsbb.767373.xyz';
+
+  // ── Token 持久化（sessionStorage，关页面即清除）────────────────
+  const tokenInput  = document.getElementById('token-input');
+  const tokenStatus = document.getElementById('token-status');
+  const saved = sessionStorage.getItem('xsbb_admin_token');
+  if (saved) { tokenInput.value = saved; tokenStatus.textContent = '已填入'; tokenStatus.className = 'token-status ok'; }
+  tokenInput.addEventListener('input', () => {
+    const v = tokenInput.value.trim();
+    sessionStorage.setItem('xsbb_admin_token', v);
+    tokenStatus.textContent  = v ? '已填入' : '未填写';
+    tokenStatus.className    = v ? 'token-status ok' : 'token-status';
+  });
+  const getToken = () => tokenInput.value.trim();
+
+  // ── Toast ─────────────────────────────────────────────────────
+  let _tt;
+  function toast(msg, type = 'ok') {
+    const el = document.getElementById('toast');
+    el.textContent = msg; el.className = `toast show ${type}`;
+    clearTimeout(_tt);
+    _tt = setTimeout(() => { el.className = 'toast'; }, 2500);
+  }
+
+  // ── 加载列表 ──────────────────────────────────────────────────
+  async function loadPosts() {
+    const el = document.getElementById('post-list');
+    try {
+      const res   = await fetch(`${API}/api/posts?limit=20`);
+      const { posts } = await res.json();
+      if (!posts.length) { el.innerHTML = '<p class="empty">暂无内容</p>'; return; }
+      el.innerHTML = posts.map(p => `
+        <div class="post-card" data-id="${p.id}">
+          <div class="post-meta">#${p.id} &nbsp;·&nbsp; type-${p.type} &nbsp;·&nbsp; ${p.device || '—'} &nbsp;·&nbsp; ${p.created_at.slice(0,16).replace('T',' ')}</div>
+          <div class="post-body">${escHtml(p.content)}</div>
+          ${p.tag ? `<div class="post-tag"># ${escHtml(p.tag)}</div>` : ''}
+          <button class="del-btn" onclick="deletePost(${p.id})">删除</button>
+        </div>
+      `).join('');
+    } catch(e) {
+      el.innerHTML = `<p class="empty">加载失败：${e.message}</p>`;
+    }
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ── 发布 ──────────────────────────────────────────────────────
+  async function submitPost() {
+    const token   = getToken();
+    const content = document.getElementById('f-content').value.trim();
+    if (!token)   { toast('请先填写 ADMIN_TOKEN', 'fail'); return; }
+    if (!content) { toast('内容不能为空', 'fail'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = '发布中…';
+    try {
+      const res = await fetch(`${API}/api/posts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          content,
+          tag:    document.getElementById('f-tag').value.trim(),
+          type:   Number(document.getElementById('f-type').value),
+          device: document.getElementById('f-device').value.trim(),
+        }),
+      });
+      if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
+      toast('发布成功 ✓');
+      document.getElementById('f-content').value = '';
+      document.getElementById('f-tag').value     = '';
+      loadPosts();
+    } catch(e) {
+      toast('失败：' + e.message, 'fail');
+    } finally {
+      btn.disabled = false; btn.textContent = '发布';
+    }
+  }
+
+  // ── 删除 ──────────────────────────────────────────────────────
+  async function deletePost(id) {
+    if (!confirm(`确认删除 #${id}？`)) return;
+    const token = getToken();
+    if (!token) { toast('请先填写 ADMIN_TOKEN', 'fail'); return; }
+    try {
+      const res = await fetch(`${API}/api/posts/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('删除失败');
+      toast(`已删除 #${id}`);
+      document.querySelector(`[data-id="${id}"]`)?.remove();
+    } catch(e) {
+      toast(e.message, 'fail');
+    }
+  }
+
+  loadPosts();
+</script>
+</body>
+</html>

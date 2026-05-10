@@ -3,8 +3,8 @@
 .AppleDouble
 .LSOverride
 
-indexmax.html
-xsbbmax.js
+worker/
+migration/
 # Icon must end with two \r
 Icon
 
