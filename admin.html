@@ -315,7 +315,7 @@
         if (!posts.length) { el.innerHTML = '<p class="empty">暂无内容</p>'; return; }
         el.innerHTML = posts.map(p => `
         <div class="post-card" data-id="${p.id}">
-          <div class="post-meta">#${p.id} &nbsp;·&nbsp; type-${p.type} &nbsp;·&nbsp; ${p.device || '—'} &nbsp;·&nbsp; ${new Date(p.created_at).toLocaleString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).replace(/\//g,'-')}</div>s
+          <div class="post-meta">#${p.id} &nbsp;·&nbsp; type-${p.type} &nbsp;·&nbsp; ${p.device || '—'} &nbsp;·&nbsp; ${new Date(p.created_at).toLocaleString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).replace(/\//g,'-')}</div>
           <div class="post-body">${escHtml(p.content)}</div>
           ${p.tag ? `<div class="post-tag"># ${escHtml(p.tag)}</div>` : ''}
           <button class="del-btn" onclick="deletePost(${p.id})">删除</button>
